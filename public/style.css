@@ -1,0 +1,92 @@
+/* src/style.css */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Zabrání scrollbarům na body */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  
+  #app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Celá výška viewportu */
+  }
+  
+  #browser-controls {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: #e0e0e0;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  #browser-controls button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    padding: 4px 8px;
+    margin-right: 5px;
+    cursor: pointer;
+    color: #333;
+  }
+  #browser-controls button:hover {
+    color: #000;
+  }
+  #browser-controls button:disabled {
+    color: #aaa;
+    cursor: not-allowed;
+  }
+  
+  
+  #url-input {
+    flex-grow: 1; /* Zabere většinu místa */
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+  
+  #content-area {
+    flex-grow: 1; /* Zabere zbytek vertikálního místa */
+    position: relative; /* Nutné pro absolutní pozicování webview, pokud by bylo potřeba */
+    background-color: #fff; /* Pozadí, než se načte stránka */
+    overflow: hidden; /* Zajistí, že webview nepřeteče */
+  }
+  
+  /* Styl pro webview - width a height jsou nastaveny inline v HTML, ale můžeme přidat další zde */
+  #browser-view {
+    border: none; /* Odstraní případný výchozí rámeček */
+    display: inline-flex; /* Oprava pro Electron >= 5 */
+    width: 100%;
+    height: 100%;
+  }
+
+
+  
+  /* Kontejner pro všechna webview */
+  #webview-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Styly pro jednotlivá webview uvnitř kontejneru */
+  #webview-container webview {
+    position: absolute; /* Klíčové pro překrývání */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    visibility: hidden; /* Výchozí stav - neviditelné */
+    background-color: #fff; /* Pozadí pro případ prodlevy načítání */
+  }
+  
+  /* Aktivní webview bude viditelné */
+  #webview-container webview.active-webview {
+    visibility: visible;
+    z-index: 1; /* Zajistí, že je navrchu */
+  }

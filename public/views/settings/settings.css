@@ -1,0 +1,280 @@
+/* settings.css */
+:root {
+    --primary-color: #4285f4;
+    --primary-hover: #3367d6;
+    --error-color: #d93025;
+    --success-color: #0f9d58;
+    --bg-color: #f5f5f5;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --text-secondary: #5f6368;
+    --border-color: #dadce0;
+    --input-bg: #f1f3f4;
+    --input-focus: #e8f0fe;
+    --shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.settings-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+}
+
+header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+}
+
+h1 {
+    font-size: 28px;
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+h1 i {
+    margin-right: 10px;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.settings-section {
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.help-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+}
+
+input[type="url"],
+input[type="text"],
+select {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 15px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    transition: all 0.2s;
+}
+
+input[type="url"]:focus,
+input[type="text"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: var(--input-focus);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.input-with-icon,
+.select-with-icon {
+    position: relative;
+}
+
+.icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 18px;
+}
+
+/* Checkbox styly */
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 12px;
+    margin-top: 3px; /* Vertikální zarovnání s textem */
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+.checkbox-group label {
+    margin-bottom: 6px;
+}
+
+.checkbox-group .help-text {
+    margin-left: 30px;
+}
+
+/* Tlačítka */
+.browse-button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.browse-button:hover {
+    background-color: var(--primary-hover);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 20px;
+    gap: 15px;
+}
+
+.primary-button,
+.secondary-button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.primary-button i,
+.secondary-button i {
+    margin-right: 8px;
+}
+
+.primary-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.primary-button:hover {
+    background-color: var(--primary-hover);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.secondary-button {
+    background-color: white;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.secondary-button:hover {
+    background-color: #f1f3f4;
+}
+
+/* Stavová zpráva */
+.status-message {
+    margin-top: 20px;
+    padding: 0;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 4px;
+    opacity: 0;
+    transition: all 0.3s;
+    height: 0;
+}
+
+.status-message.success {
+    background-color: rgba(15, 157, 88, 0.1);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+    padding: 12px;
+    opacity: 1;
+    height: auto;
+}
+
+.status-message.error {
+    background-color: rgba(217, 48, 37, 0.1);
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+    padding: 12px;
+    opacity: 1;
+    height: auto;
+}
+
+/* Responsivní design */
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    .primary-button, 
+    .secondary-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .primary-button, 
+    .secondary-button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

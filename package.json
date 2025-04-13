@@ -1,0 +1,24 @@
+{
+  "name": "brow",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "cross-env NODE_ENV=development electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "chokidar": "^4.0.3",
+    "cross-env": "^7.0.3",
+    "electron": "^35.1.5",
+    "electron-reload": "^2.0.0-alpha.1"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2"
+  }
+}

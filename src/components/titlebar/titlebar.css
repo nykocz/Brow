@@ -1,0 +1,446 @@
+/* Titlebar styles */
+#title-bar {
+  height: 40px;
+  background: white;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  -webkit-app-region: drag;
+  border-bottom: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 0 12px;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Window controls - macOS style */
+#window-controls {
+  display: flex;
+  margin-left: 6px;
+  margin-right: 10px;
+  -webkit-app-region: no-drag;
+}
+
+#window-controls.macos-window-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.control-button:hover {
+  filter: brightness(0.9);
+}
+
+#close-button {
+  background-color: #ff5f57;
+}
+
+#minimize-button {
+  background-color: #febc2e;
+}
+
+#maximize-button {
+  background-color: #28c840;
+}
+
+/* Twitter button */
+#fourth-button {
+  background-color: #1DA1F2; /* Fialová barva pro imerzivní režim */
+}
+
+/* Navigation section */
+#navigation-container {
+  display: flex;
+  align-items: center;
+ /*  margin-left: 10px; */
+  -webkit-app-region: no-drag;
+  gap: 6px;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  padding: 4px;
+  margin: 0;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+}
+
+.nav-button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #333;
+}
+
+.nav-button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Skryjeme address bar container, protože není na obrázku */
+#address-bar-container {
+  display: none;
+}
+
+/* Tabs container */
+#tabs-container {
+  display: flex;
+  flex-shrink: 0;
+  overflow: visible;
+  height: 100%;
+  padding: 0 6px;
+  margin-left: 10px;
+  position: relative;
+  -webkit-app-region: drag;
+  max-width: 50%;
+  gap: 6px; /* Mezera mezi taby */
+}
+
+/* Vytvoříme pseudo element pro drag oblast */
+#tabs-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  -webkit-app-region: drag;
+}
+
+/* Hide scrollbar for tabs container */
+#tabs-container::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  min-width: 100px;
+  max-width: 200px;
+  height: 28px;
+  margin-top: 6px;
+  background-color: rgba(230, 230, 230, 0.6);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: all 0.15s ease-out;
+  position: relative;
+  -webkit-app-region: no-drag;
+  z-index: 1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  margin-right: 0;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+/* Všechny interaktivní prvky v tabu musí být no-drag */
+.tab-favicon,
+.tab-title,
+.close-tab-button {
+  -webkit-app-region: no-drag;
+  position: relative;
+  z-index: 1;
+}
+
+.tab-item:hover {
+  background-color: rgba(220, 220, 220, 0.7);
+}
+
+/* Styly pro přetahovatelné záložky */
+.tab-item.tab-drag-over {
+  background-color: rgba(200, 220, 250, 0.7);
+  border-left: 2px solid #4285f4;
+  box-shadow: 0 2px 4px rgba(66, 133, 244, 0.2);
+  transition: all 0.1s ease;
+}
+
+.tab-item[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.tab-item[draggable="true"] {
+  cursor: grab;
+}
+
+/* Záložka během přetahování */
+.tab-item.being-dragged {
+  opacity: 0.6;
+}
+
+.tab-item.active-tab {
+  background-color: rgba(240, 240, 240, 0.9);
+  height: 28px;
+  margin-top: 6px;
+  z-index: 2;
+  border-bottom: none;
+}
+
+/* Odstraníme modrou linku pro aktivní tab */
+.tab-item.active-tab::after {
+  display: none;
+}
+
+.tab-favicon {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  flex-shrink: 0;
+  opacity: 0.9;
+  border-radius: 4px;
+  padding: 2px;
+  background-color: rgba(180, 180, 180, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.active-tab .tab-favicon {
+  opacity: 1;
+  background-color: rgba(150, 150, 150, 0.4);
+}
+
+/* Předpokládáme, že uvnitř .tab-favicon je <img> tag */
+.tab-favicon img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.tab-title {
+  font-size: 12px;
+  color: #3c4043;
+  font-weight: 400;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.2;
+  letter-spacing: -0.1px;
+}
+
+.active-tab .tab-title {
+  color: #202124;
+  font-weight: 500;
+}
+
+.close-tab-button {
+  background: none;
+  border: none;
+  color: #5f6368;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+  border-radius: 50%;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-item:hover .close-tab-button,
+.tab-item.active-tab .close-tab-button {
+  visibility: visible;
+  opacity: 1;
+}
+
+.close-tab-button:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #202124;
+}
+
+/* Vstupní pole pro URL v záložce */
+.tab-url-input {
+  display: none; /* Skryto standardně */
+  flex-grow: 1;
+  height: 100%;
+  border: none;
+  background-color: #e8eaed; /* Světle šedé pozadí */
+  padding: 0 8px 0 28px; /* Odsazení pro ikonu */
+  outline: none;
+  font-size: 12px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+  color: #202124;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-app-region: no-drag;
+  position: absolute; /* Pozice přes původní obsah */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3; /* Nad ostatními prvky tabu */
+}
+
+.tab-item.editing-url {
+  /* Styly pro tab, když je v režimu editace */
+  background-color: transparent; /* Skryjeme pozadí tabu */
+  box-shadow: none;
+
+  width: 350px;
+  max-width: 350px;
+}
+
+/* Ikona lupy v input poli */
+.input-search-icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: #5f6368;
+  z-index: 4; /* Nad input polem */
+  pointer-events: none; /* Aby nebránila kliknutí do inputu */
+  -webkit-app-region: no-drag;
+}
+
+/* Prázdný prostor mezi taby a akčními tlačítky */
+.titlebar-spacer {
+  flex-grow: 1;
+  height: 100%;
+  -webkit-app-region: drag;
+}
+
+/* Kontejner pro akční tlačítka napravo */
+#action-buttons-container {
+  display: flex;
+  align-items: center;
+  -webkit-app-region: no-drag;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+/* Styl pro akční tlačítka (New Tab, Search, Settings) */
+.action-button {
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: #5f6368;
+  cursor: pointer;
+  padding: 4px;
+  margin: 0;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+}
+
+.action-button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #333;
+}
+
+
+/* Skrytí tlačítka New Tab v režimu URL input (pokud by se použil) */
+#title-bar.url-input-mode #new-tab-button,
+#title-bar.url-input-mode #search-button,
+#title-bar.url-input-mode #settings-button {
+  display: none;
+}
+
+/* === Imerzivní režim === */
+
+/* Když je aktivní imerzivní režim, skryjeme title bar kromě window-controls */
+body.immersive-mode #title-bar {
+  height: 0;
+  overflow: visible;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+
+/* V imerzivním režimu skryjeme všechny součásti title baru kromě window-controls */
+body.immersive-mode #tabs-container,
+body.immersive-mode #navigation-container,
+body.immersive-mode #action-buttons-container,
+body.immersive-mode .titlebar-spacer {
+  display: none;
+}
+
+/* Window controls budou viditelné, ale průhledné */
+body.immersive-mode #window-controls {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 2000;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  padding: 5px;
+  border-radius: 8px;
+  margin: 0;
+}
+
+/* Při najetí myší zobrazíme window controls plně */
+body.immersive-mode #window-controls:hover {
+  opacity: 1;
+}
+
+/* V imerzivním režimu roztáhneme webview container na celou výšku */
+body.immersive-mode #webview-container {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+
+/* Přizpůsobíme webview na celou plochu */
+body.immersive-mode webview.active-webview {
+  width: 100%;
+  height: 100%;
+}
+
+/* Přidáme tlačítko pro ukončení imerzivního režimu, které se zobrazí po najetí myší do horní části obrazovky */
+body.immersive-mode::before {
+  content: "Stiskněte ESC pro ukončení imerzivního režimu";
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 0 0 6px 6px;
+  font-size: 12px;
+  transition: transform 0.3s;
+  z-index: 1000;
+}
+
+body.immersive-mode:hover::before {
+  transform: translateX(-50%) translateY(0);
+}
+

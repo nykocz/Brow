@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <title>Můj Prohlížeč</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../src/components/titlebar/titlebar.css">
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+</head>
+<body>
+    <div id="app-container">
+         <div id="title-bar">
+            <!-- Window controls budou zde přidány v JavaScript -->
+            
+            <div id="navigation-container">
+                <button id="back-button" class="nav-button" title="Zpět">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <button id="forward-button" class="nav-button" title="Vpřed">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <button id="reload-button" class="nav-button" title="Obnovit">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button id="home-button" class="nav-button" title="Domů">
+                    <i class="fas fa-home"></i>
+                </button>
+                <button id="bookmark-button" class="nav-button" title="Záložka">
+                    <i class="fas fa-bookmark"></i>
+                </button>
+            </div>
+            
+            <div id="address-bar-container">
+                <input type="text" id="url-input" placeholder="Zadejte adresu nebo vyhledávání">
+            </div>
+            
+            <div id="tabs-container">
+                <!-- Záložky budou generovány dynamicky -->
+            </div>
+            
+            <div class="titlebar-spacer"></div>
+
+            <div id="action-buttons-container">
+                <button id="new-tab-button" class="action-button" title="Nová záložka">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button id="search-button" class="action-button" title="Hledat">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button id="settings-button" class="action-button" title="Nastavení">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+         </div>
+
+        <div id="content-area">
+            <div id="webview-container">
+                <!-- Webview obsah se generuje dynamicky -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Nejdřív načteme správce záložek -->
+    <script src="../src/components/tabs/tabs.js"></script>
+    <!-- Pak načteme title bar, který závisí na správci záložek -->
+    <script src="../src/components/titlebar/titlebar.js"></script>
+    <script src="../src/utils.js"></script>
+    <script src="js/renderer.js"></script>
+</body>
+</html>

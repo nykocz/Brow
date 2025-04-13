@@ -1026,8 +1026,13 @@
         homeButton.addEventListener('click', () => {
             const activeTab = getActiveTab();
            
-
+            
             if (activeTab?.webview) {
+                // if default url not contains http or https, add it
+                if (!DEFAULT_URL.includes('http')) {    
+                    
+                    DEFAULT_URL = `http://${DEFAULT_URL}`;
+                }
                 activeTab.webview.loadURL(DEFAULT_URL);
             }
         });

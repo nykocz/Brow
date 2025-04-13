@@ -54,7 +54,71 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onSettingsUpdated: (callback) => ipcRenderer.on('settings-updated-backend', (_event, value) => callback(value)),
   
   // Přidáno: Událost pro uložení nastavení
-  onSettingsSaved: (callback) => ipcRenderer.on('settings-saved', (_event) => callback())
+  onSettingsSaved: (callback) => ipcRenderer.on('settings-saved', (_event) => callback()),
+
+  // --- Theme Updates (if needed for main process to react) ---
+  // onThemeChange: (callback) => ipcRenderer.on('theme-changed', (_event, theme) => callback(theme)), // Example
+
+  // --- App Info (Example) ---
+  getAppVersion: () => ipcRenderer.invoke('get-app-version'), // Need handler in main.js
+
+  // --- General IPC (for sending messages TO main process) ---
+  send: (channel, data) => ipcRenderer.send(channel, data),
+  // --- General IPC (for receiving messages FROM main process) ---
+  on: (channel, func) => {
+    const validChannels = ['css-reload', 'app-reload', 'open-settings', 'settings-updated-backend', 'theme-change-request'];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.on(channel, (event, ...args) => func(...args));
+    } else {
+      console.warn(`Preload: Ignored attempt to listen on invalid channel: ${channel}`);
+    }
+  },
+  // --- Remove listener ---
+  removeListener: (channel, func) => {
+    ipcRenderer.removeListener(channel, func);
+  },
+  removeAllListeners: (channel) => {
+    ipcRenderer.removeAllListeners(channel);
+  }
 });
 
-console.log('Preload script loaded and electronAPI exposed.');
+// Listener for updates AFTER saving (still useful)
+ipcRenderer.on('settings-updated-backend', (_event, settings) => {
+  const theme = settings?.theme || 'light';
+  console.log(`Preload (${document.location.href}): Settings updated backend received. Applying theme: ${theme}`);
+  try {
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {
+    console.error('Preload: Error setting data-theme attribute from backend update:', e);
+  }
+});
+
+// Set initial theme based on settings potentially received early
+ipcRenderer.invoke('get-settings').then(settings => {
+   const theme = settings?.theme || 'light';
+   console.log(`Preload (${document.location.href}): Applying initial theme: ${theme}`);
+    try {
+        document.documentElement.setAttribute('data-theme', theme);
+    } catch(e) {
+         console.error('Preload: Error setting initial data-theme attribute:', e);
+    }
+}).catch(err => console.error('Preload: Error getting initial settings for theme:', err));
+
+// Add a listener specifically for the immediate theme update request
+ipcRenderer.on('theme-change-request', (_event, newTheme) => {
+    console.log(`Preload (${document.location.href}): Immediate theme change request received: ${newTheme}`);
+     try {
+        document.documentElement.setAttribute('data-theme', newTheme);
+
+        if (window.tabManager && typeof window.tabManager.updateAllWebviewsTheme === 'function') {
+             console.log(`Preload (Main Window): Triggering immediate webview theme update to: ${newTheme}`);
+             window.tabManager.updateAllWebviewsTheme(newTheme);
+        } else {
+            // console.log(`Preload (Settings Page?): Not updating webviews from here.`);
+        }
+    } catch (e) {
+        console.error(`Preload (${document.location.href}): Error setting data-theme attribute on immediate request:`, e);
+    }
+});
+
+console.log('Preload script executed and electronAPI exposed.');

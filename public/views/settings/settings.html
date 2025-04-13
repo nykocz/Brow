@@ -1,251 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Nastavení</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <!-- Link base styles if necessary -->
+    <!-- <link rel="stylesheet" href="../../style.css"> -->
     <link rel="stylesheet" href="settings.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Add Font Awesome if you want icons -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
 </head>
 <body>
     <div class="settings-container">
-        <header>
-            <h1><i class="fas fa-cog"></i> Nastavení prohlížeče</h1>
-            <p class="subtitle">Přizpůsobte si svůj prohlížeč podle vlastních preferencí</p>
-        </header>
-
-        <form id="settings-form">
-            <section class="settings-section">
-                <h2>Základní nastavení</h2>
-                
-                <div class="form-group">
-                    <label for="homepage">Domovská stránka:</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-home icon"></i>
-                        <input type="text" id="homepage" name="homepage" placeholder="www.google.com">
+        <div class="settings-sidebar">
+            <ul>
+                <li><a href="#" class="active" data-section="appearance"><i class="fas fa-paint-brush"></i> Appearance</a></li>
+                <li><a href="#" data-section="downloads"><i class="fas fa-download"></i> Downloads</a></li>
+                <li><a href="#" data-section="privacy"><i class="fas fa-shield-alt"></i> Privacy</a></li>
+                <li><a href="#" data-section="about"><i class="fas fa-info-circle"></i> About</a></li>
+                <!-- Add more sections as needed -->
+            </ul>
+        </div>
+        <div class="settings-content">
+            <!-- Appearance Section -->
+            <section id="appearance-section" class="active">
+                <h2>Appearance</h2>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h4>Theme</h4>
+                        <p>Choose between light and dark mode for the application.</p>
                     </div>
-                    <p class="help-text">Zadejte URL stránky, která se otevře při spuštění nebo po kliknutí na tlačítko Domů</p>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="search-engine">Výchozí vyhledávač:</label>
-                    <div class="select-with-icon">
-                        <i class="fas fa-search icon"></i>
-                        <select id="search-engine" name="searchEngine">
-                            <option value="google">Google</option>
-                            <option value="duckduckgo">DuckDuckGo</option>
-                            <option value="seznam">Seznam</option>
-                            <option value="bing">Bing</option>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h4>Homepage</h4>
+                        <p>Select the page that opens when you start the browser or open a new tab.</p>
+                    </div>
+                    <div class="setting-control homepage-control">
+                        <select id="homepage-select">
+                            <option value="https://www.google.com">Google</option>
+                            <option value="https://duckduckgo.com">DuckDuckGo</option>
+                            <option value="about:blank">Blank Page</option>
+                            <option value="custom">Custom URL</option>
                         </select>
+                        <div class="custom-homepage-input-container" style="display: none;">
+                             <input type="text" id="custom-homepage-input" placeholder="Enter custom URL (e.g., https://...)">
+                        </div>
                     </div>
-                    <p class="help-text">Vyberte výchozí vyhledávač pro vyhledávání z adresního řádku</p>
                 </div>
             </section>
 
-            <section class="settings-section">
-                <h2>Pokročilá nastavení</h2>
-                
-                <div class="form-group">
-                    <label for="download-path">Umístění stahovaných souborů:</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-download icon"></i>
-                        <input type="text" id="download-path" name="downloadPath" readonly>
-                        <button type="button" id="choose-download-path" class="browse-button">Procházet</button>
+            <!-- Downloads Section -->
+            <section id="downloads-section">
+                <h2>Downloads</h2>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h4>Location</h4>
+                        <p>Choose where to save downloaded files.</p>
                     </div>
-                    <p class="help-text">Vyberte složku, kam se budou ukládat stažené soubory</p>
-                </div>
-
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" id="clear-on-exit" name="clearOnExit">
-                    <label for="clear-on-exit">Vymazat historii při ukončení</label>
-                    <p class="help-text">Automaticky vymaže historii prohlížení při ukončení aplikace</p>
-                </div>
-
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" id="enable-notifications" name="enableNotifications" checked>
-                    <label for="enable-notifications">Povolit oznámení</label>
-                    <p class="help-text">Povolit nebo zakázat webové notifikace</p>
+                    <div class="setting-control">
+                        <span id="download-path-display" title="Current download location">Loading...</span>
+                        <button id="choose-folder-button" class="settings-button">Choose Folder</button>
+                    </div>
                 </div>
             </section>
 
-            <div class="form-actions">
-                <button type="button" id="reset-settings" class="secondary-button">
-                    <i class="fas fa-undo"></i> Obnovit výchozí
-                </button>
-                <button type="submit" id="save-settings-button" class="primary-button">
-                    <i class="fas fa-save"></i> Uložit nastavení
-                </button>
+            <!-- Privacy Section (Placeholder) -->
+            <section id="privacy-section">
+                <h2>Privacy</h2>
+                <p>Privacy settings are not yet implemented.</p>
+            </section>
+
+            <!-- About Section (Placeholder) -->
+            <section id="about-section">
+                <h2>About Brow</h2>
+                <p>Brow - A simple Electron browser.</p>
+                <p>Version: <span id="app-version">?.?.?</span></p> <!-- Version can be populated via preload -->
+            </section>
+
+             <!-- Buttons Area -->
+             <div class="settings-actions-container">
+                <button id="reset-settings-button" class="settings-button">Reset all to default</button>
+                <button id="apply-settings-button" class="settings-button primary" disabled>Apply Changes</button>
             </div>
-        </form>
-
-        <div id="status-message" class="status-message"></div>
+        </div>
     </div>
-
-    <script>
-        // Reference na formulářové prvky
-        const settingsForm = document.getElementById('settings-form');
-        const homepageInput = document.getElementById('homepage');
-        const searchEngineSelect = document.getElementById('search-engine');
-        const downloadPathInput = document.getElementById('download-path');
-        const chooseDownloadPathBtn = document.getElementById('choose-download-path');
-        const clearOnExitCheckbox = document.getElementById('clear-on-exit');
-        const enableNotificationsCheckbox = document.getElementById('enable-notifications');
-        const resetButton = document.getElementById('reset-settings');
-        const saveButton = document.getElementById('save-settings-button');
-        const statusMessage = document.getElementById('status-message');
-
-        // Funkce pro zobrazení stavové zprávy
-        function showStatus(message, isError = false) {
-            statusMessage.textContent = message;
-            statusMessage.className = 'status-message ' + (isError ? 'error' : 'success');
-            // Po 5 sekundách skryjeme zprávu
-            setTimeout(() => {
-                statusMessage.className = 'status-message';
-                statusMessage.textContent = '';
-            }, 5000);
-        }
-
-        // Funkce pro načtení aktuálního nastavení
-        async function loadSettings() {
-            try {
-                if (window.electronAPI && window.electronAPI.getSettings) {
-                    const settings = await window.electronAPI.getSettings();
-                    console.log('Načtená nastavení:', settings);
-                    
-                    if (settings) {
-                        // Nastavení hodnot formuláře
-                        console.log(settings);
-                        homepageInput.value = settings.homepage || 'https://www.google.com';
-                        searchEngineSelect.value = settings.searchEngine || 'google';
-                        downloadPathInput.value = settings.downloadPath || '';
-                        clearOnExitCheckbox.checked = settings.clearOnExit || false;
-                        enableNotificationsCheckbox.checked = 
-                            settings.enableNotifications !== undefined ? settings.enableNotifications : true;
-                    }
-                } else {
-                    console.warn('window.electronAPI.getSettings není k dispozici.');
-                    showStatus('API pro načtení nastavení není dostupné.', true);
-                }
-            } catch (error) {
-                console.error('Chyba při načítání nastavení:', error);
-                showStatus('Chyba při načítání nastavení: ' + error.message, true);
-            }
-        }
-
-        // Funkce pro uložení nastavení
-        async function saveSettings(event) {
-            event.preventDefault(); // Zamezíme výchozímu chování formuláře
-            
-            const settings = {
-                homepage: homepageInput.value.trim(),
-                searchEngine: searchEngineSelect.value,
-                downloadPath: downloadPathInput.value,
-                clearOnExit: clearOnExitCheckbox.checked,
-                enableNotifications: enableNotificationsCheckbox.checked
-            };
-
-            console.log('Ukládání nastavení:', settings);
-            
-            try {
-                if (window.electronAPI && window.electronAPI.saveSettings) {
-                    const result = await window.electronAPI.saveSettings(settings);
-                    console.log('Výsledek uložení:', result);
-                    
-                    if (result && result.success) {
-                        showStatus('Nastavení bylo úspěšně uloženo.');
-                        
-                        // Oznámení o změně nastavení do hlavního procesu
-                        if (window.electronAPI.notifySettingsChanged) {
-                            window.electronAPI.notifySettingsChanged(settings);
-                        }
-                    } else {
-                        showStatus('Nepodařilo se uložit nastavení: ' + 
-                            (result && result.error ? result.error : 'Neznámá chyba'), true);
-                    }
-                } else {
-                    console.warn('window.electronAPI.saveSettings není k dispozici.');
-                    showStatus('API pro uložení nastavení není dostupné.', true);
-                }
-            } catch (error) {
-                console.error('Chyba při ukládání nastavení:', error);
-                showStatus('Chyba při ukládání nastavení: ' + error.message, true);
-            }
-        }
-
-        // Funkce pro výběr složky pro stahování
-        async function chooseDownloadPath() {
-            try {
-                if (window.electronAPI && window.electronAPI.chooseFolder) {
-                    const path = await window.electronAPI.chooseFolder();
-                    if (path) {
-                        downloadPathInput.value = path;
-                    }
-                } else {
-                    console.warn('window.electronAPI.chooseFolder není k dispozici.');
-                    showStatus('API pro výběr složky není dostupné.', true);
-                }
-            } catch (error) {
-                console.error('Chyba při výběru složky:', error);
-                showStatus('Chyba při výběru složky: ' + error.message, true);
-            }
-        }
-
-        // Funkce pro obnovení výchozího nastavení
-        async function resetSettings() {
-            try {
-                if (window.electronAPI && window.electronAPI.resetSettings) {
-                    const defaultSettings = await window.electronAPI.resetSettings();
-                    if (defaultSettings) {
-                        // Aktualizace formuláře
-                        homepageInput.value = defaultSettings.homepage || 'https://www.google.com';
-                        searchEngineSelect.value = defaultSettings.searchEngine || 'google';
-                        downloadPathInput.value = defaultSettings.downloadPath || '';
-                        clearOnExitCheckbox.checked = defaultSettings.clearOnExit || false;
-                        enableNotificationsCheckbox.checked = 
-                            defaultSettings.enableNotifications !== undefined ? defaultSettings.enableNotifications : true;
-                        
-                        showStatus('Nastavení bylo obnoveno na výchozí hodnoty.');
-                    }
-                } else {
-                    // Pokud API není dostupné, provedeme alespoň lokální reset
-                    homepageInput.value = 'https://www.google.com';
-                    searchEngineSelect.value = 'google';
-                    downloadPathInput.value = '';
-                    clearOnExitCheckbox.checked = false;
-                    enableNotificationsCheckbox.checked = true;
-                    
-                    showStatus('API pro reset nastavení není dostupné. Provedeno lokální obnovení.');
-                }
-            } catch (error) {
-                console.error('Chyba při resetování nastavení:', error);
-                showStatus('Chyba při resetování nastavení: ' + error.message, true);
-            }
-        }
-
-        // Přidání posluchačů událostí
-        settingsForm.addEventListener('submit', saveSettings);
-        chooseDownloadPathBtn.addEventListener('click', chooseDownloadPath);
-        resetButton.addEventListener('click', resetSettings);
-
-        // Načtení nastavení při načtení stránky
-        document.addEventListener('DOMContentLoaded', loadSettings);
-
-        // Posluchač pro příjem aktualizací z hlavního procesu
-        if (window.electronAPI && window.electronAPI.onSettingsUpdated) {
-            window.electronAPI.onSettingsUpdated((updatedSettings) => {
-                console.log('Přijata aktualizace nastavení z hlavního procesu:', updatedSettings);
-                
-                // Aktualizace formuláře, pokud přijdou nová data
-                if (updatedSettings) {
-                    homepageInput.value = updatedSettings.homepage || homepageInput.value;
-                    searchEngineSelect.value = updatedSettings.searchEngine || searchEngineSelect.value;
-                    if (updatedSettings.downloadPath) downloadPathInput.value = updatedSettings.downloadPath;
-                    if (updatedSettings.clearOnExit !== undefined) 
-                        clearOnExitCheckbox.checked = updatedSettings.clearOnExit;
-                    if (updatedSettings.enableNotifications !== undefined) 
-                        enableNotificationsCheckbox.checked = updatedSettings.enableNotifications;
-                }
-            });
-        }
-    </script>
+    <script src="settings.js"></script>
 </body>
 </html>

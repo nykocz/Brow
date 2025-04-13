@@ -1,280 +1,342 @@
 /* settings.css */
+/* Import variables if they are not globally available from style.css */
+/* (Assuming variables like --background-color, --text-color etc. are available) */
+
 :root {
-    --primary-color: #4285f4;
-    --primary-hover: #3367d6;
-    --error-color: #d93025;
-    --success-color: #0f9d58;
-    --bg-color: #f5f5f5;
-    --card-bg: #ffffff;
-    --text-color: #333333;
-    --text-secondary: #5f6368;
-    --border-color: #dadce0;
-    --input-bg: #f1f3f4;
-    --input-focus: #e8f0fe;
-    --shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    /* Define specific settings colors (light theme) */
+    --settings-bg: #ffffff;
+    --settings-sidebar-bg: #f3f3f3;
+    --settings-border-color: #e0e0e0;
+    --settings-text-primary: #202124;
+    --settings-text-secondary: #5f6368;
+    --settings-item-hover-bg: #eeeeee;
+    --settings-sidebar-active-bg: #e8e8e8;
+    --settings-sidebar-active-border: #0078d4; /* Edge blue */
+    --settings-button-bg: #f3f3f3;
+    --settings-button-text: #333333;
+    --settings-button-hover-bg: #e0e0e0;
+    --settings-button-primary-bg: #0078d4;
+    --settings-button-primary-text: #ffffff;
+    --settings-button-primary-hover-bg: #005a9e;
+    --settings-input-bg: #ffffff;
+    --settings-input-border: #cccccc;
+    --settings-input-focus-border: #0078d4;
+    --settings-toggle-bg-off: #bdc1c6;
+    --settings-toggle-bg-on: #0078d4;
+    --settings-toggle-knob: #ffffff;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+[data-theme="dark"] {
+    /* Define specific settings colors (dark theme) */
+    --settings-bg: #1f1f1f; /* Slightly different dark */
+    --settings-sidebar-bg: #2b2b2b;
+    --settings-border-color: #444444;
+    --settings-text-primary: #e8eaed;
+    --settings-text-secondary: #bdc1c6;
+    --settings-item-hover-bg: #3a3a3a;
+    --settings-sidebar-active-bg: #3f3f3f;
+    --settings-sidebar-active-border: #2d89ef; /* Lighter Edge blue */
+    --settings-button-bg: #3a3a3a;
+    --settings-button-text: #e8eaed;
+    --settings-button-hover-bg: #4a4a4a;
+    --settings-button-primary-bg: #2d89ef;
+    --settings-button-primary-text: #ffffff;
+    --settings-button-primary-hover-bg: #1a75d1;
+    --settings-input-bg: #3a3a3a;
+    --settings-input-border: #555555;
+    --settings-input-focus-border: #2d89ef;
+    --settings-toggle-bg-off: #5f6368;
+    --settings-toggle-bg-on: #2d89ef;
+    --settings-toggle-knob: #e8eaed;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    padding: 20px;
-    overflow-y: auto;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--settings-bg);
+    color: var(--settings-text-primary);
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    font-size: 14px; /* Slightly larger base font for readability */
 }
 
 .settings-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    padding: 30px;
-}
-
-header {
-    margin-bottom: 30px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 20px;
-}
-
-h1 {
-    font-size: 28px;
-    color: var(--primary-color);
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-
-h1 i {
-    margin-right: 10px;
-}
-
-.subtitle {
-    color: var(--text-secondary);
-    font-size: 16px;
-}
-
-.settings-section {
-    margin-bottom: 30px;
-}
-
-h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-color);
-    font-weight: 500;
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.help-text {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-top: 6px;
-}
-
-input[type="url"],
-input[type="text"],
-select {
+    display: flex;
     width: 100%;
-    padding: 12px 12px 12px 40px;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 15px;
-    background-color: var(--input-bg);
-    color: var(--text-color);
-    transition: all 0.2s;
+    height: 100%;
 }
 
-input[type="url"]:focus,
-input[type="text"]:focus,
-select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    background-color: var(--input-focus);
-    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+/* Sidebar */
+.settings-sidebar {
+    width: 240px;
+    min-width: 200px;
+    background-color: var(--settings-sidebar-bg);
+    padding-top: 20px; /* Add padding only at the top */
+    height: 100%;
+    box-sizing: border-box;
+    border-right: 1px solid var(--settings-border-color);
+    flex-shrink: 0;
+    overflow-y: auto;
+    display: flex; /* Use flex to push list down if needed */
+    flex-direction: column;
 }
 
-.input-with-icon,
-.select-with-icon {
-    position: relative;
+.settings-sidebar ul {
+    list-style: none;
+    padding: 0 10px; /* Add horizontal padding for the list itself */
+    margin: 0;
+    width: 100%; /* Ensure ul takes full width */
+    box-sizing: border-box;
 }
 
-.icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-    font-size: 18px;
+.settings-sidebar li {
+    margin-bottom: 6px; /* Add small space between items */
 }
 
-/* Checkbox styly */
-.checkbox-group {
-    display: flex;
-    align-items: flex-start;
-}
-
-.checkbox-group input[type="checkbox"] {
-    margin-right: 12px;
-    margin-top: 3px; /* Vertikální zarovnání s textem */
-    width: 18px;
-    height: 18px;
-    accent-color: var(--primary-color);
-}
-
-.checkbox-group label {
-    margin-bottom: 6px;
-}
-
-.checkbox-group .help-text {
-    margin-left: 30px;
-}
-
-/* Tlačítka */
-.browse-button {
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-
-.browse-button:hover {
-    background-color: var(--primary-hover);
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color);
-    margin-top: 20px;
-    gap: 15px;
-}
-
-.primary-button,
-.secondary-button {
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
+.settings-sidebar li a {
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
+    padding: 8px 15px; /* Slightly adjusted padding */
+    text-decoration: none;
+    color: var(--settings-text-primary);
+    font-size: 14px;
+    border-radius: 6px; /* Add rounded corners */
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; /* Smooth transitions */
 }
 
-.primary-button i,
-.secondary-button i {
-    margin-right: 8px;
+.settings-sidebar li a:hover {
+    background-color: var(--settings-item-hover-bg);
 }
 
-.primary-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-}
-
-.primary-button:hover {
-    background-color: var(--primary-hover);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-.secondary-button {
-    background-color: white;
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-}
-
-.secondary-button:hover {
-    background-color: #f1f3f4;
-}
-
-/* Stavová zpráva */
-.status-message {
-    margin-top: 20px;
-    padding: 0;
-    text-align: center;
+.settings-sidebar li a.active {
+    background-color: var(--settings-button-primary-bg); /* Use primary button color for active */
+    color: var(--settings-button-primary-text); /* Use contrast text color */
     font-weight: 500;
+}
+
+.settings-sidebar li a i { /* Placeholder for icons */
+    margin-right: 15px;
+    width: 18px;
+    text-align: center;
+    color: var(--settings-text-secondary);
+    transition: color 0.15s ease; /* Smooth icon color transition */
+}
+.settings-sidebar li a.active i {
+    color: var(--settings-button-primary-text); /* Match active text color */
+}
+
+/* Content Area */
+.settings-content {
+    flex-grow: 1;
+    padding: 30px 40px;
+    overflow-y: auto;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex; /* Use flexbox for content layout */
+    flex-direction: column; /* Stack sections and actions */
+}
+
+.settings-content > section { /* Target direct children sections */
+    display: none; /* Hidden by default */
+    margin-bottom: 40px;
+    flex-shrink: 0; /* Prevent sections from shrinking */
+}
+
+.settings-content section.active {
+    display: block; /* Show active section */
+}
+
+.settings-content h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--settings-text-primary);
+    margin-top: 0;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--settings-border-color);
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--settings-border-color);
+}
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-label {
+    /* Added for potentially better alignment */
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.setting-label h4 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--settings-text-primary);
+}
+
+.setting-label p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--settings-text-secondary);
+    max-width: 400px;
+}
+
+.setting-control {
+    /* min-width: 150px; */ /* Remove fixed min-width if causing issues */
+    gap: 10px; /* Reduced gap slightly */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping if controls get too wide */
+}
+
+/* Homepage specific control layout */
+.homepage-control {
+    flex-direction: column; /* Stack select and input */
+    align-items: flex-end; /* Align items to the right */
+    gap: 8px;
+}
+
+.custom-homepage-input-container {
+    width: 100%; /* Make container take width */
+    max-width: 250px; /* Limit input width */
+}
+
+#custom-homepage-input {
+    width: 100%; /* Make input fill container */
+    box-sizing: border-box; /* Include padding/border in width */
+}
+
+/* Specific Controls */
+select, input[type="text"] {
+    padding: 8px 10px;
+    border: 1px solid var(--settings-input-border);
+    background-color: var(--settings-input-bg);
+    color: var(--settings-text-primary);
     border-radius: 4px;
+    font-size: 13px;
+    min-width: 200px; /* Adjusted min-width */
+}
+
+select:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--settings-input-focus-border);
+    box-shadow: 0 0 0 2px rgba(var(--settings-input-focus-border), 0.2); /* Optional focus ring */
+}
+
+/* Button styling */
+.settings-button {
+    padding: 8px 16px;
+    border: 1px solid var(--settings-border-color);
+    background-color: var(--settings-button-bg);
+    color: var(--settings-button-text);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.15s ease;
+}
+
+.settings-button:hover {
+    background-color: var(--settings-button-hover-bg);
+}
+
+.settings-button.primary {
+    background-color: var(--settings-button-primary-bg);
+    color: var(--settings-button-primary-text);
+    border-color: transparent;
+}
+
+.settings-button.primary:hover {
+    background-color: var(--settings-button-primary-hover-bg);
+}
+
+.settings-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--settings-button-bg); /* Ensure disabled style */
+    color: var(--settings-text-secondary);
+}
+.settings-button.primary:disabled {
+    background-color: var(--settings-sidebar-active-border); /* Use a faded primary color */
+     color: var(--settings-button-primary-text);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle-switch input {
     opacity: 0;
-    transition: all 0.3s;
+    width: 0;
     height: 0;
 }
 
-.status-message.success {
-    background-color: rgba(15, 157, 88, 0.1);
-    color: var(--success-color);
-    border: 1px solid var(--success-color);
-    padding: 12px;
-    opacity: 1;
-    height: auto;
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--settings-toggle-bg-off);
+    transition: .3s;
+    border-radius: 20px;
 }
 
-.status-message.error {
-    background-color: rgba(217, 48, 37, 0.1);
-    color: var(--error-color);
-    border: 1px solid var(--error-color);
-    padding: 12px;
-    opacity: 1;
-    height: auto;
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--settings-toggle-knob);
+    transition: .3s;
+    border-radius: 50%;
 }
 
-/* Responsivní design */
-@media (max-width: 768px) {
-    .settings-container {
-        padding: 20px;
-        margin: 10px;
-    }
-    
-    h1 {
-        font-size: 24px;
-    }
-    
-    .primary-button, 
-    .secondary-button {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
+input:checked + .slider {
+    background-color: var(--settings-toggle-bg-on);
 }
 
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    .primary-button, 
-    .secondary-button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--settings-toggle-bg-on); /* Optional focus indicator */
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Display path for download folder */
+.download-path-display {
+    font-size: 12px;
+    color: var(--settings-text-secondary);
+    margin-right: 10px;
+    max-width: 200px; /* Limit width */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* Settings Actions Container */
+.settings-actions-container {
+    margin-top: auto; /* Push to the bottom */
+    padding-top: 20px;
+    border-top: 1px solid var(--settings-border-color);
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Space between buttons */
+    flex-shrink: 0; /* Prevent shrinking */
 }

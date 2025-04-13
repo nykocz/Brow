@@ -1,7 +1,62 @@
+:root {
+    --titlebar-background: #f0f0f0;
+    --titlebar-text-color: #000000;
+    /* Light theme colors */
+    --nav-button-color: #555;
+    --nav-button-hover-bg: rgba(0, 0, 0, 0.04);
+    --nav-button-hover-color: #333;
+    --nav-button-disabled-color: #ccc;
+    --tab-background: rgba(230, 230, 230, 0.6);
+    --tab-hover-background: rgba(220, 220, 220, 0.7);
+    --tab-active-background: rgba(240, 240, 240, 0.9);
+    --tab-favicon-background: rgba(180, 180, 180, 0.3);
+    --tab-favicon-active-background: rgba(150, 150, 150, 0.4);
+    --tab-title-color: #3c4043;
+    --tab-title-active-color: #202124;
+    --tab-close-button-color: #5f6368;
+    --tab-close-button-hover-bg: rgba(0, 0, 0, 0.08);
+    --tab-close-button-hover-color: #202124;
+    --tab-url-input-bg: #e8eaed;
+    --tab-url-input-color: #202124;
+    --tab-url-input-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+    --input-search-icon-color: #5f6368;
+    --action-button-color: #5f6368;
+    --action-button-hover-bg: rgba(0, 0, 0, 0.04);
+    --action-button-hover-color: #333;
+}
+
+[data-theme="dark"] {
+    --titlebar-background: #1e1e1e;
+    --titlebar-text-color: #ffffff;
+    /* Dark theme colors */
+    --nav-button-color: #bdc1c6; /* Lighter gray for dark */
+    --nav-button-hover-bg: rgba(255, 255, 255, 0.1); /* Lighter hover */
+    --nav-button-hover-color: #e8eaed;
+    --nav-button-disabled-color: #5f6368; /* Darker gray for disabled */
+    --tab-background: rgba(40, 40, 40, 0.7); /* Darker tab */
+    --tab-hover-background: rgba(55, 55, 55, 0.8); /* Slightly lighter hover */
+    --tab-active-background: rgba(60, 60, 60, 0.95); /* Even lighter active tab */
+    --tab-favicon-background: rgba(80, 80, 80, 0.4);
+    --tab-favicon-active-background: rgba(100, 100, 100, 0.5);
+    --tab-title-color: #bdc1c6; /* Light gray text */
+    --tab-title-active-color: #e8eaed; /* Lighter text for active */
+    --tab-close-button-color: #9aa0a6; /* Lighter close button */
+    --tab-close-button-hover-bg: rgba(255, 255, 255, 0.15); /* Lighter hover bg */
+    --tab-close-button-hover-color: #e8eaed; /* Lighter hover color */
+    --tab-url-input-bg: #282a2d; /* Darker input background */
+    --tab-url-input-color: #e8eaed; /* Light text */
+    --tab-url-input-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    --input-search-icon-color: #9aa0a6;
+    --action-button-color: #bdc1c6; /* Lighter gray for dark */
+    --action-button-hover-bg: rgba(255, 255, 255, 0.1); /* Lighter hover */
+    --action-button-hover-color: #e8eaed;
+}
+
 /* Titlebar styles */
 #title-bar {
   height: 40px;
-  background: white;
+  background-color: var(--titlebar-background);
+  color: var(--titlebar-text-color);
   display: flex;
   align-items: center;
   user-select: none;
@@ -68,7 +123,7 @@
   background: none;
   border: none;
   font-size: 14px;
-  color: #555;
+  color: var(--nav-button-color);
   cursor: pointer;
   padding: 4px;
   margin: 0;
@@ -82,12 +137,12 @@
 }
 
 .nav-button:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-  color: #333;
+  background-color: var(--nav-button-hover-bg);
+  color: var(--nav-button-hover-color);
 }
 
 .nav-button:disabled {
-  color: #ccc;
+  color: var(--nav-button-disabled-color);
   cursor: not-allowed;
 }
 
@@ -135,7 +190,7 @@
   max-width: 200px;
   height: 28px;
   margin-top: 6px;
-  background-color: rgba(230, 230, 230, 0.6);
+  background-color: var(--tab-background);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -163,7 +218,7 @@
 }
 
 .tab-item:hover {
-  background-color: rgba(220, 220, 220, 0.7);
+  background-color: var(--tab-hover-background);
 }
 
 /* Styly pro přetahovatelné záložky */
@@ -188,7 +243,7 @@
 }
 
 .tab-item.active-tab {
-  background-color: rgba(240, 240, 240, 0.9);
+  background-color: var(--tab-active-background);
   height: 28px;
   margin-top: 6px;
   z-index: 2;
@@ -208,7 +263,7 @@
   opacity: 0.9;
   border-radius: 4px;
   padding: 2px;
-  background-color: rgba(180, 180, 180, 0.3);
+  background-color: var(--tab-favicon-background);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -216,7 +271,7 @@
 
 .active-tab .tab-favicon {
   opacity: 1;
-  background-color: rgba(150, 150, 150, 0.4);
+  background-color: var(--tab-favicon-active-background);
 }
 
 /* Předpokládáme, že uvnitř .tab-favicon je <img> tag */
@@ -228,7 +283,7 @@
 
 .tab-title {
   font-size: 12px;
-  color: #3c4043;
+  color: var(--tab-title-color);
   font-weight: 400;
   flex-grow: 1;
   overflow: hidden;
@@ -240,14 +295,14 @@
 }
 
 .active-tab .tab-title {
-  color: #202124;
+  color: var(--tab-title-active-color);
   font-weight: 500;
 }
 
 .close-tab-button {
   background: none;
   border: none;
-  color: #5f6368;
+  color: var(--tab-close-button-color);
   font-size: 14px;
   cursor: pointer;
   padding: 0;
@@ -270,8 +325,8 @@
 }
 
 .close-tab-button:hover {
-  background-color: rgba(0, 0, 0, 0.08);
-  color: #202124;
+  background-color: var(--tab-close-button-hover-bg);
+  color: var(--tab-close-button-hover-color);
 }
 
 /* Vstupní pole pro URL v záložce */
@@ -280,13 +335,13 @@
   flex-grow: 1;
   height: 100%;
   border: none;
-  background-color: #e8eaed; /* Světle šedé pozadí */
+  background-color: var(--tab-url-input-bg);
   padding: 0 8px 0 28px; /* Odsazení pro ikonu */
   outline: none;
   font-size: 12px;
   border-radius: 6px;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
-  color: #202124;
+  box-shadow: var(--tab-url-input-shadow);
+  color: var(--tab-url-input-color);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-app-region: no-drag;
   position: absolute; /* Pozice přes původní obsah */
@@ -313,7 +368,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 13px;
-  color: #5f6368;
+  color: var(--input-search-icon-color);
   z-index: 4; /* Nad input polem */
   pointer-events: none; /* Aby nebránila kliknutí do inputu */
   -webkit-app-region: no-drag;
@@ -340,7 +395,7 @@
   background: none;
   border: none;
   font-size: 15px;
-  color: #5f6368;
+  color: var(--action-button-color);
   cursor: pointer;
   padding: 4px;
   margin: 0;
@@ -354,8 +409,8 @@
 }
 
 .action-button:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-  color: #333;
+  background-color: var(--action-button-hover-bg);
+  color: var(--action-button-hover-color);
 }
 
 
@@ -394,7 +449,7 @@ body.immersive-mode #window-controls {
   z-index: 2000;
   opacity: 0.5;
   transition: opacity 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(40, 40, 40, 0.3); /* Darker semi-transparent bg */
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   padding: 5px;
@@ -431,7 +486,7 @@ body.immersive-mode::before {
   top: 0;
   left: 50%;
   transform: translateX(-50%) translateY(-100%);
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(30, 30, 30, 0.85); /* Darker tooltip bg */
   color: white;
   padding: 8px 12px;
   border-radius: 0 0 6px 6px;

@@ -1,213 +1,301 @@
-// main.js
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-const path = require('path');
-const customStore = require('./src/components/store/store.js');
+// =============================================================================
+// Main Process - main.js
+// =============================================================================
+// This file is the main entry point for the Electron application.
+// It manages the application lifecycle, creates browser windows, and communicates
+// with renderer processes using IPC.
+// =============================================================================
 
-// Přidat: Načtení nastavení při startu pomocí customStore
-let currentSettings = customStore.getSettings();
+// Load environment variables from .env file (if used)
+require('dotenv').config();
 
-// Aktualizovaná DEFAULT_URL - použijeme načtená nastavení
-let DEFAULT_URL = currentSettings.homepage;
+// --- Electron and Node.js Modules ---
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron'); // Added dialog back for menu logic
+const path = require('path');                     // Module for working with paths
 
-// Přidání electron-reload pro hot reload
-const isDev = process.env.NODE_ENV !== 'production';
+// --- Custom Application Modules ---
+const customStore = require('./src/components/store/store.js'); // Settings management
+const utils = require('./src/utils.js');                   // Utility functions (dock icon)
+const splash = require('./splash.js');                     // Splash screen logic
+const { registerIpcHandlers } = require('./src/ipcHandle.js'); // IPC handler registration (ensure this path is correct)
+
+// --- Global Variables and Configuration ---
+let mainWindow = null; // Reference to the main application window
+const isDev = process.env.NODE_ENV !== 'production'; // Development environment detection
+const useSplashScreen = process.env.SPLASH_SCREEN === 'true'; // Control splash screen via env variable
+
+// --- Development Environment Setup (Hot Reload) ---
 if (isDev) {
-  const electronReload = require('electron-reload');
-  electronReload(__dirname, {
-    electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
-    hardResetMethod: 'exit',
-    // Sledovat tyto soubory a adresáře pro změny
-    watched: [
-      path.join(__dirname, 'src/**/*.js'),
-      path.join(__dirname, 'src/**/*.css'),
-      path.join(__dirname, 'public/**/*'),
-      path.join(__dirname, 'main.js'),
-    ],
-    // Ignorovat node_modules
-    ignored: /node_modules|[\/\\]\./,
-    // Funkce volaná před reloadem
-    forceHardReset: false,
-    awaitWriteFinish: {
-      stabilityThreshold: 300,
-      pollInterval: 100
-    }
-  });
-  
-  // Doplňková funkce pro oznámení preload skriptu o hot reloadu
-  const notifyReload = () => {
-    if (mainWindow && mainWindow.webContents) {
-      mainWindow.webContents.send('app-reload');
-      console.log('Hot reload notification sent to renderer');
-    }
-  };
-  
-  // Specialní notifikace pro CSS změny
-  const notifyCssReload = () => {
-    if (mainWindow && mainWindow.webContents) {
-      mainWindow.webContents.send('css-reload');
-      console.log('CSS reload notification sent to renderer');
-    }
-  };
-  
-  // Sleduj změny v CSS souborech samostatně (bez restartování celé aplikace)
-  const chokidar = require('chokidar');
-  const cssWatcher = chokidar.watch(path.join(__dirname, 'src/**/*.css'), {
-    ignored: /node_modules/,
-    awaitWriteFinish: {
-      stabilityThreshold: 300,
-      pollInterval: 100
-    }
-  });
-  
-  cssWatcher.on('change', (path) => {
-    console.log(`CSS file changed: ${path}`);
-    notifyCssReload();
-  });
+    setupDevelopmentEnvironment(); // Encapsulate dev setup
 }
 
-// Promněná pro uchování instance hlavního okna
-let mainWindow;
+// =============================================================================
+// Development Environment Setup Function
+// =============================================================================
+function setupDevelopmentEnvironment() {
+    console.log('Setting up development environment (Hot Reload)...');
+    // Configure electron-reload
+    try {
+        const electronReload = require('electron-reload');
+        electronReload(__dirname, {
+            electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
+            hardResetMethod: 'exit',
+            watched: [ // Watched files and directories
+                path.join(__dirname, 'src/'), // Watch entire src
+                path.join(__dirname, 'public/'), // Watch entire public
+                path.join(__dirname, 'main.js'),
+                path.join(__dirname, 'splash.js'),
+                path.join(__dirname, '*.js'), // Watch root JS files
+            ],
+            ignored: /node_modules|[\/\\]\.|dist|build/, // Ignore output/deps
+            forceHardReset: false,
+            awaitWriteFinish: { stabilityThreshold: 300, pollInterval: 100 }
+        });
+        console.log('electron-reload configured.');
+    } catch (err) {
+        console.warn('electron-reload not found, skipping hot reload setup.', err);
+    }
 
+    // Configure chokidar for CSS-only reload
+    try {
+        const chokidar = require('chokidar');
+        const cssWatcher = chokidar.watch(path.join(__dirname, '**/*.css'), { // Watch all CSS files
+            ignored: /node_modules|dist|build/,
+            persistent: true,
+            awaitWriteFinish: { stabilityThreshold: 300, pollInterval: 100 }
+        });
+
+        const notifyCssReload = () => {
+            // Send to main window renderer and potentially all webviews
+            if (mainWindow?.webContents) {
+                mainWindow.webContents.send('css-reload');
+                console.log('CSS reload notification sent to main renderer');
+            }
+            // TODO: Consider sending 'css-reload' to webviews if needed
+        };
+        cssWatcher.on('change', (filePath) => {
+            console.log(`CSS file changed: ${filePath}`);
+            notifyCssReload();
+        });
+        console.log('chokidar CSS watcher configured.');
+    } catch (err) {
+         console.warn('chokidar not found, skipping CSS-only reload setup.', err);
+    }
+}
+
+
+// =============================================================================
+// Main Window Creation Function
+// =============================================================================
 function createWindow() {
-  // Detekce macOS
-  const isMacOS = process.platform === 'darwin';
+    console.log('Creating main window...');
+    mainWindow = new BrowserWindow({
+        width: 1000,
+        height: 700,
+        show: false, // Show only when 'ready-to-show'
+        frame: false,
+        // macOS specific appearance
+        vibrancy: 'under-window',
+        visualEffectState: 'active',
+        // Web Preferences for security and functionality
+        webPreferences: {
+            preload: path.join(__dirname, 'src/preload.js'),
+            webviewTag: true,
+            nodeIntegration: false,
+            contextIsolation: true,
+            allowRunningInsecureContent: false,
+            spellcheck: true // Enable spellcheck
+        },
+    });
 
-  // Vytvoření okna prohlížeče.
-  mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    frame: false,
-    vibrancy: 'under-window',
-    visualEffectState: 'active',
-  
-    webPreferences: {
-      preload: path.join(__dirname, 'src/preload.js'), 
-      webviewTag: true, 
-      nodeIntegration: false, 
-      contextIsolation: true, 
-      // Povolení načítání lokálních souborů, pokud by bylo potřeba
-      // webSecurity: false, // Nedoporučeno pro produkci!
-      allowRunningInsecureContent: false, // Ponechat na false
-    },
-  });
+    // Load the main application page
+    const indexHTML = path.join(__dirname, 'public', 'index.html');
+    mainWindow.loadFile(indexHTML)
+        .then(() => console.log(`Loaded index.html from: ${indexHTML}`))
+        .catch(err => console.error(`Failed to load index.html: ${err}`));
 
-  // Načtení index.html do okna.
-  mainWindow.loadFile('public/index.html');
+    // Register IPC handlers (defined in ipcHandle.js)
+    registerIpcHandlers(mainWindow);
 
-  // Otevření DevTools (pro ladění)
-  if (isDev) {
-    mainWindow.webContents.openDevTools({ mode: 'detach' });
-  }
+    // --- Main Window Event Listeners ---
+    mainWindow.on('closed', () => {
+        console.log('Main window closed.');
+        mainWindow = null; // Dereference the window object
+    });
 
-  // --- Komunikace pro ovládání okna z vlastního titlebaru ---
-  ipcMain.on('minimize-window', () => mainWindow.minimize());
-  ipcMain.on('maximize-window', () => {
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize();
-    } else {
-      mainWindow.maximize();
-    }
-  });
-  ipcMain.on('close-window', () => mainWindow.close());
-  ipcMain.on('reload-content', () => mainWindow.reload());
+    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+        console.error(`Main window failed to load content: ${errorDescription} (Code: ${errorCode}) URL: ${validatedURL}`);
+        // TODO: Implement fallback or error page loading
+    });
 
-  // --- Komunikace pro Nastavení ---
-  ipcMain.handle('get-settings', async () => {
-    try {
-      // Vracíme aktuálně načtená nastavení (nebo je znovu načteme)
-      return customStore.getSettings(); // Vždy vrátí nejaktuálnější z disku
-    } catch (error) {
-      console.error('Failed to get settings:', error);
-      return null; // Nebo vrátit výchozí hodnoty?
-    }
-  });
+    // Show window gracefully when ready
+    mainWindow.once('ready-to-show', () => {
+        console.log('Main window is ready to show.');
+        const splashAnimationDuration = useSplashScreen ? 2500 : 0; // Duration from splash animation
 
-  ipcMain.handle('save-settings', async (event, settings) => {
-    try {
-      console.log('Received settings to save:', settings);
-      // Uložíme nastavení pomocí customStore
-      const success = customStore.saveSettings(settings);
-
-      if (success) {
-        // Aktualizace lokální proměnné a DEFAULT_URL
-        currentSettings = settings; // Aktualizujeme držená nastavení v paměti
-        DEFAULT_URL = settings.homepage;
-        console.log('Settings saved successfully. New homepage:', DEFAULT_URL);
-        // Můžeme poslat zprávu zpět do rendereru, pokud je potřeba
-        if (mainWindow && mainWindow.webContents) {
-           mainWindow.webContents.send('settings-updated-backend', currentSettings);
+        if (useSplashScreen) {
+            splash.animateAndDestroySplashWindow(splashAnimationDuration);
         }
-        return { success: true };
-      } else {
-         // Pokud saveSettings vrátilo false
-         console.error('Failed to save settings using custom store.');
-         return { success: false, error: 'Failed to write settings file.' };
-      }
-    } catch (error) {
-      console.error('Failed to save settings:', error);
-      return { success: false, error: error.message };
-    }
-  });
-  
-  // Nová metoda pro resetování nastavení na výchozí hodnoty
-  ipcMain.handle('reset-settings', async () => {
-    try {
-      const defaultSettings = customStore.resetSettings();
-      if (defaultSettings) {
-        currentSettings = defaultSettings;
-        DEFAULT_URL = defaultSettings.homepage;
-        if (mainWindow && mainWindow.webContents) {
-          mainWindow.webContents.send('settings-updated-backend', defaultSettings);
-        }
-        return defaultSettings;
-      } else {
-        return customStore.DEFAULT_SETTINGS;
-      }
-    } catch (error) {
-      console.error('Failed to reset settings:', error);
-      return null;
-    }
-  });
-  
-  // Dialog pro výběr složky (pro nastavení složky pro stahování)
-  ipcMain.handle('choose-folder', async () => {
-    try {
-      const result = await dialog.showOpenDialog(mainWindow, {
-        properties: ['openDirectory'],
-        title: 'Vyberte složku pro stahování souborů'
-      });
-      
-      if (!result.canceled && result.filePaths.length > 0) {
-        return result.filePaths[0];
-      }
-      return null;
-    } catch (error) {
-      console.error('Failed to open folder dialog:', error);
-      return null;
-    }
-  });
-  
-   // Listener pro případné další akce po změně nastavení
-   ipcMain.on('settings-changed', (event, settings) => {
-     console.log('Settings changed signal received in main:', settings);
-     // Zde můžete provést další akce, např. aktualizovat UI hlavního okna
-   });
+
+        // Show the main window after the splash animation (or immediately if no splash)
+        setTimeout(() => {
+            if (mainWindow && !mainWindow.isDestroyed()) {
+                mainWindow.show();
+                console.log('Main window shown.');
+                if (isDev) {
+                    mainWindow.webContents.openDevTools({ mode: 'detach' });
+                    console.log('Opening DevTools for main window.');
+                }
+            } else {
+                console.log('Main window was destroyed before it could be shown.');
+            }
+        }, splashAnimationDuration);
+    });
 }
 
-// Tato metoda bude volána, když je Electron připravený.
+// =============================================================================
+// Application Menu Definition
+// =============================================================================
+/**
+ * Creates the application menu template.
+ * @param {BrowserWindow} appWindow - Reference to the main window for IPC.
+ * @returns {Array} The Electron menu template array.
+ */
+const createMenuTemplate = (appWindow) => {
+    // Keep template concise, only include necessary items
+    const template = [
+        // App Menu (macOS)
+        {
+            label: app.name,
+            submenu: [
+                { role: 'about', label: `About ${app.name}` },
+                { type: 'separator' },
+                {
+                    label: 'Settings...',
+                    accelerator: 'CmdOrCtrl+,',
+                    click: () => appWindow?.webContents?.send('open-settings')
+                },
+                {
+                    label: 'Check for Updates...',
+                    click: async () => {
+                        console.log('Menu: Checking for updates... (placeholder)');
+                        dialog.showMessageBox(appWindow, { // Use dialog module directly
+                            type: 'info', title: 'Updates',
+                            message: 'Update checking is not implemented yet.', buttons: ['OK']
+                        }).catch(err => console.error("Error showing update dialog:", err)); // Add catch for safety
+                    }
+                },
+                { type: 'separator' },
+                { role: 'services' },
+                { type: 'separator' },
+                { role: 'hide' },
+                { role: 'hideOthers' },
+                { role: 'unhide' },
+                { type: 'separator' },
+                { role: 'quit' }
+            ]
+        },
+        // Basic Edit Menu (Optional but recommended for copy/paste)
+        {
+            label: 'Edit',
+            submenu: [
+                { role: 'undo' }, { role: 'redo' }, { type: 'separator' },
+                { role: 'cut' }, { role: 'copy' }, { role: 'paste' },
+                { role: 'selectAll' }
+            ]
+        },
+         // Basic Window Menu
+        {
+            label: 'Window',
+            submenu: [
+                { role: 'minimize' }, { role: 'zoom' },
+                ...(process.platform === 'darwin' ? [
+                    { type: 'separator' }, { role: 'front' }
+                ] : [
+                    { role: 'close' }
+                ])
+            ]
+        }
+    ];
+    return template;
+};
+
+
+// =============================================================================
+// Electron Application Lifecycle Events
+// =============================================================================
+
+// --- 'ready' event ---
 app.whenReady().then(() => {
-  createWindow();
+    console.log('Electron app is ready.');
 
-  // Znovu vytvoření okna na macOS, když se klikne na ikonu v docku a nejsou žádná okna otevřená.
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
+    // Set dock icon (macOS only)
+    if (process.platform === 'darwin') {
+        utils.setDockIcon();
+        console.log('Dock icon set (macOS).');
+    }
+
+    // Create splash screen if enabled
+    if (useSplashScreen) {
+        splash.createSplashWindow();
+        console.log('Splash window created.');
+    }
+
+    // Create the main browser window
+    createWindow(); // Creates and assigns mainWindow
+
+    // Set the application menu (requires mainWindow for context)
+    if (mainWindow) {
+        const menuTemplate = createMenuTemplate(mainWindow);
+        const menu = Menu.buildFromTemplate(menuTemplate);
+        Menu.setApplicationMenu(menu);
+        console.log('Custom application menu set.');
+    } else {
+        // Fallback if window creation failed before menu setup
+        console.warn('Main window not available when setting menu, setting minimal fallback menu.');
+        Menu.setApplicationMenu(Menu.buildFromTemplate([{ role: 'appMenu' }]));
+    }
 });
 
-// Ukončení aplikace, když jsou všechna okna zavřená (kromě macOS).
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') { // 'darwin' je kódové označení pro macOS
-    app.quit();
-  }
-  app.quit();
+// --- 'activate' event (macOS) ---
+app.on('activate', () => {
+    // Re-create window if no windows are open when dock icon is clicked
+    if (BrowserWindow.getAllWindows().length === 0) {
+        console.log('App activated (macOS) - no windows open, creating main window.');
+        createWindow();
+    } else if (mainWindow && !mainWindow.isVisible()) {
+        console.log('App activated (macOS) - main window hidden, showing.');
+        mainWindow.show();
+    } else if (mainWindow) {
+        console.log('App activated (macOS) - main window visible, focusing.');
+        mainWindow.focus();
+    }
 });
+
+// --- 'window-all-closed' event ---
+app.on('window-all-closed', () => {
+    console.log('All windows closed.');
+    // Quit the app on Windows/Linux
+    if (process.platform !== 'darwin') {
+        console.log('Quitting app (non-macOS).');
+        app.quit();
+    }
+    // On macOS, app usually stays active. Uncomment below to quit on macOS too.
+    // app.quit();
+});
+
+// --- Additional IPC Handlers (that don't belong in ipcHandle.js) ---
+
+// Example: Handler for getting app version needed by settings page preload
+ipcMain.handle('get-app-version', () => {
+    console.log('IPC: Request for app version received.');
+    return app.getVersion();
+});
+
+// No specific handler needed in main.js for 'theme-change-request'
+// as it's renderer-to-renderer communication facilitated by preload.
+// Just ensure the preload script allows the channel if using the optional method.
+
+// =============================================================================
+// End of main.js file
+// =============================================================================

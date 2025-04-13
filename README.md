@@ -48,7 +48,7 @@ Brow is a lightweight web browser developed using modern web technologies (HTML,
     *   Hot reload enabled for faster development iterations (JS, CSS, HTML).
     *   CSS-only hot reload for instant style updates without full app restart.
 
-## 📸 Screenshots (Optional)
+<!-- ## 📸 Screenshots (Optional)
 
 <!-- Add screenshots of your application here -->
 <!--
@@ -64,7 +64,7 @@ Brow is a lightweight web browser developed using modern web technologies (HTML,
 </details>
 -->
 
----
+ 
 
 ## 💾 Installation
 

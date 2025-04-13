@@ -7,16 +7,33 @@ const toggleTheme = () => {
 
     root.setAttribute('data-theme', newTheme);
 
+    // Update theme for all webviews
+    if (window.TabManager && typeof window.TabManager.updateAllWebviewsTheme === 'function') {
+        window.TabManager.updateAllWebviewsTheme(newTheme);
+    }
 
     // Update theme icon
     const themeIcon = document.querySelector('#theme-toggle-button i');
     themeIcon.className = `fas fa-${newTheme === 'dark' ? 'sun' : 'moon'}`;
 
-    // Save theme preference
+    // Save theme preference and trigger immediate update
     if (window.electronAPI && window.electronAPI.saveSettings) {
         window.electronAPI.getSettings().then(settings => {
             const updatedSettings = { ...settings, theme: newTheme };
-            window.electronAPI.saveSettings(updatedSettings);
+            window.electronAPI.saveSettings(updatedSettings).then(() => {
+                // Immediately notify other windows about theme change
+                if (window.electronAPI.setTheme) {
+                    window.electronAPI.setTheme(newTheme);
+                }
+                
+                // If the active tab is settings, refresh it
+                if (window.TabManager) {
+                    const activeTab = window.TabManager.getActiveTab();
+                    if (activeTab && activeTab.id === window.TabManager.INTERNAL_PAGES.SETTINGS_ID) {
+                        window.TabManager.reloadTab(activeTab.id);
+                    }
+                }
+            });
         });
     }
 };

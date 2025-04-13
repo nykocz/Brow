@@ -1,95 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings</title>
-    <!-- Link base styles if necessary -->
-    <!-- <link rel="stylesheet" href="../../style.css"> -->
+    <title>Nastavení</title>
     <link rel="stylesheet" href="settings.css">
-    <!-- Add Font Awesome if you want icons -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
 </head>
 <body>
     <div class="settings-container">
-        <div class="settings-sidebar">
-            <ul>
-                <li><a href="#" class="active" data-section="appearance"><i class="fas fa-paint-brush"></i> Appearance</a></li>
-                <li><a href="#" data-section="downloads"><i class="fas fa-download"></i> Downloads</a></li>
-                <li><a href="#" data-section="privacy"><i class="fas fa-shield-alt"></i> Privacy</a></li>
-                <li><a href="#" data-section="about"><i class="fas fa-info-circle"></i> About</a></li>
-                <!-- Add more sections as needed -->
+        <aside class="settings-sidebar">
+            <div class="sidebar-header">
+                <h1>Settings</h1>
+            </div>
+            <ul class="settings-menu">
+                <li class="active" data-section="general">
+                    <i class="fas fa-home"></i>
+                    <span>General</span>
+                </li>
+                <li data-section="appearance">
+                    <i class="fas fa-palette"></i>
+                    <span>Appearance</span>
+                </li>
+                <li data-section="privacy">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Privacy and Security</span>
+                </li>
+                <li data-section="search">
+                    <i class="fas fa-search"></i>
+                    <span>Search</span>
+                </li>
+                <li data-section="advanced">
+                    <i class="fas fa-cog"></i>
+                    <span>Advanced</span>
+                </li>
             </ul>
-        </div>
-        <div class="settings-content">
-            <!-- Appearance Section -->
-            <section id="appearance-section" class="active">
-                <h2>Appearance</h2>
-                <div class="setting-item">
-                    <div class="setting-label">
-                        <h4>Theme</h4>
-                        <p>Choose between light and dark mode for the application.</p>
+        </aside>
+        <main class="settings-content">
+            <section id="general" class="settings-section">
+                <h2>General</h2>
+                <div class="settings-group">
+                    <h3>Startup</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>On startup</label>
+                            <span class="setting-description">Choose what to show when the browser starts</span>
+                        </div>
+                        <select class="setting-control" data-setting="startupBehavior">
+                            <option value="homepage">Open the home page</option>
+                            <option value="restore">Continue where you left off</option>
+                            <option value="specific">Open a specific page</option>
+                        </select>
                     </div>
-                    <div class="setting-control">
+                </div>
+                <div class="settings-group">
+                    <h3>Home page</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>Home page URL</label>
+                            <span class="setting-description">Enter the URL you want to use as your home page</span>
+                        </div>
+                        <input type="text" class="setting-control" data-setting="homepage" placeholder="https://www.google.com">
+                    </div>
+                </div>
+            </section>
+
+            <section id="appearance" class="settings-section hidden">
+                <h2>Appearance</h2>
+                <div class="settings-group">
+                    <h3>Theme</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>Browser theme</label>
+                            <span class="setting-description">Choose your browser color theme</span>
+                        </div>
+                        <select class="setting-control" data-setting="theme">
+                            <option value="system">System default</option>
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section id="privacy" class="settings-section hidden">
+                <h2>Privacy and Security</h2>
+                <div class="settings-group">
+                    <h3>Privacy</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>Do Not Track</label>
+                            <span class="setting-description">Request websites to not track your activity</span>
+                        </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" id="theme-toggle">
-                            <span class="slider"></span>
+                            <input type="checkbox" data-setting="doNotTrack">
+                            <span class="toggle-slider"></span>
                         </label>
                     </div>
                 </div>
-                <div class="setting-item">
-                    <div class="setting-label">
-                        <h4>Homepage</h4>
-                        <p>Select the page that opens when you start the browser or open a new tab.</p>
-                    </div>
-                    <div class="setting-control homepage-control">
-                        <select id="homepage-select">
-                            <option value="https://www.google.com">Google</option>
-                            <option value="https://duckduckgo.com">DuckDuckGo</option>
-                            <option value="about:blank">Blank Page</option>
-                            <option value="custom">Custom URL</option>
-                        </select>
-                        <div class="custom-homepage-input-container" style="display: none;">
-                             <input type="text" id="custom-homepage-input" placeholder="Enter custom URL (e.g., https://...)">
+            </section>
+
+            <section id="search" class="settings-section hidden">
+                <h2>Search</h2>
+                <div class="settings-group">
+                    <h3>Search engine</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>Default search engine</label>
+                            <span class="setting-description">Choose your default search engine</span>
                         </div>
+                        <select class="setting-control" data-setting="searchEngine">
+                            <option value="google">Google</option>
+                            <option value="bing">Bing</option>
+                            <option value="duckduckgo">DuckDuckGo</option>
+                        </select>
                     </div>
                 </div>
             </section>
 
-            <!-- Downloads Section -->
-            <section id="downloads-section">
-                <h2>Downloads</h2>
-                <div class="setting-item">
-                    <div class="setting-label">
-                        <h4>Location</h4>
-                        <p>Choose where to save downloaded files.</p>
-                    </div>
-                    <div class="setting-control">
-                        <span id="download-path-display" title="Current download location">Loading...</span>
-                        <button id="choose-folder-button" class="settings-button">Choose Folder</button>
+            <section id="advanced" class="settings-section hidden">
+                <h2>Advanced</h2>
+                <div class="settings-group">
+                    <h3>System</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>Hardware acceleration</label>
+                            <span class="setting-description">Use GPU hardware acceleration when available</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" data-setting="hardwareAcceleration" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
                     </div>
                 </div>
             </section>
-
-            <!-- Privacy Section (Placeholder) -->
-            <section id="privacy-section">
-                <h2>Privacy</h2>
-                <p>Privacy settings are not yet implemented.</p>
-            </section>
-
-            <!-- About Section (Placeholder) -->
-            <section id="about-section">
-                <h2>About Brow</h2>
-                <p>Brow - A simple Electron browser.</p>
-                <p>Version: <span id="app-version">?.?.?</span></p> <!-- Version can be populated via preload -->
-            </section>
-
-             <!-- Buttons Area -->
-             <div class="settings-actions-container">
-                <button id="reset-settings-button" class="settings-button">Reset all to default</button>
-                <button id="apply-settings-button" class="settings-button primary" disabled>Apply Changes</button>
-            </div>
-        </div>
+        </main>
     </div>
     <script src="settings.js"></script>
 </body>

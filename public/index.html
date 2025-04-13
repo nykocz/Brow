@@ -45,15 +45,20 @@
                 <button id="new-tab-button" class="action-button" title="Nová záložka">
                     <i class="fas fa-plus"></i>
                 </button>
-                <button id="search-button" class="action-button" title="Hledat">
+                 <button id="search-button" style="display: none;" class="action-button" title="Hledat">
                     <i class="fas fa-search"></i>
-                </button>
+                </button> 
                 <button id="theme-toggle-button" class="action-button" title="Přepnout motiv">
                     <i class="fas fa-moon"></i>
                 </button>
+                 <button id="history-button" class="action-button" title="Historie">
+                    <i class="fas fa-history"></i>
+                </button>
+               
                 <button id="settings-button" class="action-button" title="Nastavení">
                     <i class="fas fa-cog"></i>
                 </button>
+              
                
             </div>
          </div>
@@ -66,10 +71,10 @@
     </div>
 
     <!-- Nejdřív načteme správce záložek -->
-    <script src="../src/components/tabs/tabs.js"></script>
     <!-- Pak načteme title bar, který závisí na správci záložek -->
-    <script src="../src/components/titlebar/titlebar.js"></script>
-    <script src="../src/utils.js"></script>
     <script src="js/renderer.js"></script>
+    <script src="../src/utils.js"></script>
+    <script src="../src/components/tabs/tabs.js"></script>
+    <script src="../src/components/titlebar/titlebar.js"></script>
 </body>
 </html>

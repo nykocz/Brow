@@ -7,8 +7,12 @@
     --nav-button-hover-color: #333;
     --nav-button-disabled-color: #ccc;
     --tab-background: rgba(230, 230, 230, 0.6);
+    --tab-background2:rgba(218, 218, 218, 0.6);
+
     --tab-hover-background: rgba(220, 220, 220, 0.7);
     --tab-active-background: rgba(240, 240, 240, 0.9);
+    --tab-active-background2:rgba(188, 188, 188, 0.7);
+
     --tab-favicon-background: rgba(180, 180, 180, 0.3);
     --tab-favicon-active-background: rgba(150, 150, 150, 0.4);
     --tab-title-color: #3c4043;
@@ -190,7 +194,9 @@
   max-width: 200px;
   height: 28px;
   margin-top: 6px;
-  background-color: var(--tab-background);
+  background-color: var(--tab-background2);
+  backdrop-filter: blur(6.9px);
+-webkit-backdrop-filter: blur(6.9px);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -243,7 +249,7 @@
 }
 
 .tab-item.active-tab {
-  background-color: var(--tab-active-background);
+  background-color: var(--tab-active-background2);
   height: 28px;
   margin-top: 6px;
   z-index: 2;
@@ -447,7 +453,7 @@ body.immersive-mode #window-controls {
   top: 10px;
   left: 10px;
   z-index: 2000;
-  opacity: 0.5;
+  opacity: 0.2;
   transition: opacity 0.3s ease;
   background-color: rgba(40, 40, 40, 0.3); /* Darker semi-transparent bg */
   backdrop-filter: blur(5px);

@@ -1,279 +1,233 @@
-/* settings.css */
-/* Import variables if they are not globally available from style.css */
-/* (Assuming variables like --background-color, --text-color etc. are available) */
-
 :root {
-    /* Define specific settings colors (light theme) */
-    --settings-bg: #ffffff;
-    --settings-sidebar-bg: #f3f3f3;
-    --settings-border-color: #e0e0e0;
-    --settings-text-primary: #202124;
-    --settings-text-secondary: #5f6368;
-    --settings-item-hover-bg: #eeeeee;
-    --settings-sidebar-active-bg: #e8e8e8;
-    --settings-sidebar-active-border: #0078d4; /* Edge blue */
-    --settings-button-bg: #f3f3f3;
-    --settings-button-text: #333333;
-    --settings-button-hover-bg: #e0e0e0;
-    --settings-button-primary-bg: #0078d4;
-    --settings-button-primary-text: #ffffff;
-    --settings-button-primary-hover-bg: #005a9e;
-    --settings-input-bg: #ffffff;
-    --settings-input-border: #cccccc;
-    --settings-input-focus-border: #0078d4;
-    --settings-toggle-bg-off: #bdc1c6;
-    --settings-toggle-bg-on: #0078d4;
-    --settings-toggle-knob: #ffffff;
+    
+    /* Light theme colors */
+    --bg-color: rgba(240, 240, 240, 0.8);
+    --text-color: #000000;
+    --text-secondary: #5f6368;
+    --border-color: rgba(225, 225, 225, 0.8);
+    --sidebar-bg: rgba(255, 255, 255, 0.7);
+    --sidebar-hover: rgba(242, 242, 242, 0.8);
+    --sidebar-active: rgba(229, 241, 251, 0.8);
+    --sidebar-active-text: #0078d4;
+    --section-title: #000000;
+    --control-bg: rgba(255, 255, 255, 0.7);
+    --control-border: rgba(204, 204, 204, 0.5);
+    --control-hover: rgba(245, 245, 245, 0.8);
+    --toggle-bg: #cccccc;
+    --toggle-active: #0078d4;
 }
 
 [data-theme="dark"] {
-    /* Define specific settings colors (dark theme) */
-    --settings-bg: #1f1f1f; /* Slightly different dark */
-    --settings-sidebar-bg: #2b2b2b;
-    --settings-border-color: #444444;
-    --settings-text-primary: #e8eaed;
-    --settings-text-secondary: #bdc1c6;
-    --settings-item-hover-bg: #3a3a3a;
-    --settings-sidebar-active-bg: #3f3f3f;
-    --settings-sidebar-active-border: #2d89ef; /* Lighter Edge blue */
-    --settings-button-bg: #3a3a3a;
-    --settings-button-text: #e8eaed;
-    --settings-button-hover-bg: #4a4a4a;
-    --settings-button-primary-bg: #2d89ef;
-    --settings-button-primary-text: #ffffff;
-    --settings-button-primary-hover-bg: #1a75d1;
-    --settings-input-bg: #3a3a3a;
-    --settings-input-border: #555555;
-    --settings-input-focus-border: #2d89ef;
-    --settings-toggle-bg-off: #5f6368;
-    --settings-toggle-bg-on: #2d89ef;
-    --settings-toggle-knob: #e8eaed;
+    --bg-color: rgba(32, 33, 36, 0.8);
+    --text-color: #ffffff;
+    --text-secondary: #9ba0a5;
+    --border-color: rgba(60, 64, 67, 0.8);
+    --sidebar-bg: rgba(41, 42, 45, 0.7);
+    --sidebar-hover: rgba(53, 54, 58, 0.8);
+    --sidebar-active: rgba(59, 61, 63, 0.8);
+    --sidebar-active-text: #88c0f7;
+    --section-title: #ffffff;
+    --control-bg: rgba(53, 54, 58, 0.7);
+    --control-border: rgba(60, 64, 67, 0.5);
+    --control-hover: rgba(60, 64, 67, 0.8);
+    --toggle-bg: #5f6368;
+    --toggle-active: #8ab4f8;
 }
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--settings-bg);
-    color: var(--settings-text-primary);
-    height: 100vh;
-    display: flex;
-    overflow: hidden;
-    font-size: 14px; /* Slightly larger base font for readability */
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .settings-container {
     display: flex;
-    width: 100%;
-    height: 100%;
+    height: 100vh;
+    background-color: transparent;
+    padding: 24px;
+    gap: 24px;
 }
 
-/* Sidebar */
+/* Sidebar Styles */
 .settings-sidebar {
-    width: 240px;
-    min-width: 200px;
-    background-color: var(--settings-sidebar-bg);
-    padding-top: 20px; /* Add padding only at the top */
-    height: 100%;
-    box-sizing: border-box;
-    border-right: 1px solid var(--settings-border-color);
-    flex-shrink: 0;
-    overflow-y: auto;
-    display: flex; /* Use flex to push list down if needed */
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    border: 1px solid var(--border-color);
+    display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 12px;
+    height: calc(100vh - 48px);
+  /*   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
 }
 
-.settings-sidebar ul {
-    list-style: none;
-    padding: 0 10px; /* Add horizontal padding for the list itself */
+.sidebar-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px 12px 0 0;
+}
+
+.sidebar-header h1 {
     margin: 0;
-    width: 100%; /* Ensure ul takes full width */
-    box-sizing: border-box;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
 }
 
-.settings-sidebar li {
-    margin-bottom: 6px; /* Add small space between items */
+.settings-menu {
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
 }
 
-.settings-sidebar li a {
+.settings-menu li {
+    padding: 12px 20px;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    padding: 8px 15px; /* Slightly adjusted padding */
-    text-decoration: none;
-    color: var(--settings-text-primary);
-    font-size: 14px;
-    border-radius: 6px; /* Add rounded corners */
-    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; /* Smooth transitions */
+    color: var(--text-color);
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    margin: 2px 8px;
 }
 
-.settings-sidebar li a:hover {
-    background-color: var(--settings-item-hover-bg);
+.settings-menu li i {
+    width: 20px;
+    margin-right: 12px;
+    font-size: 1rem;
 }
 
-.settings-sidebar li a.active {
-    background-color: var(--settings-button-primary-bg); /* Use primary button color for active */
-    color: var(--settings-button-primary-text); /* Use contrast text color */
-    font-weight: 500;
+.settings-menu li:hover {
+    background-color: var(--sidebar-hover);
 }
 
-.settings-sidebar li a i { /* Placeholder for icons */
-    margin-right: 15px;
-    width: 18px;
-    text-align: center;
-    color: var(--settings-text-secondary);
-    transition: color 0.15s ease; /* Smooth icon color transition */
-}
-.settings-sidebar li a.active i {
-    color: var(--settings-button-primary-text); /* Match active text color */
+.settings-menu li.active {
+    background-color: var(--sidebar-active);
+    color: var(--sidebar-active-text);
 }
 
-/* Content Area */
+/* Content Styles */
 .settings-content {
-    flex-grow: 1;
-    padding: 30px 40px;
+    flex: 1;
+    padding: 0;
     overflow-y: auto;
-    height: 100%;
-    box-sizing: border-box;
-    display: flex; /* Use flexbox for content layout */
-    flex-direction: column; /* Stack sections and actions */
+    
+    background-color: var(--bg-color);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    height: calc(100vh - 48px);
 }
 
-.settings-content > section { /* Target direct children sections */
-    display: none; /* Hidden by default */
-    margin-bottom: 40px;
-    flex-shrink: 0; /* Prevent sections from shrinking */
+.settings-section {
+    max-width: 800px;
+    background-color: var(--control-bg);
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    margin-bottom: 24px;
 }
 
-.settings-content section.active {
-    display: block; /* Show active section */
-}
-
-.settings-content h2 {
-    font-size: 20px;
+.settings-section h2 {
+    font-size: 1.5rem;
     font-weight: 600;
-    color: var(--settings-text-primary);
-    margin-top: 0;
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--settings-border-color);
+    margin: 0 0 24px 0;
+    color: var(--section-title);
+}
+
+.settings-group {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.settings-group:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.settings-group h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    color: var(--text-color);
 }
 
 .setting-item {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 15px 0;
-    border-bottom: 1px solid var(--settings-border-color);
-}
-.setting-item:last-child {
-    border-bottom: none;
-}
-
-.setting-label {
-    /* Added for potentially better alignment */
-    flex-grow: 1;
-    margin-right: 20px;
-}
-
-.setting-label h4 {
-    margin: 0 0 4px 0;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--settings-text-primary);
-}
-
-.setting-label p {
-    margin: 0;
-    font-size: 12px;
-    color: var(--settings-text-secondary);
-    max-width: 400px;
-}
-
-.setting-control {
-    /* min-width: 150px; */ /* Remove fixed min-width if causing issues */
-    gap: 10px; /* Reduced gap slightly */
-    display: flex;
-    justify-content: flex-end;
     align-items: center;
-    flex-wrap: wrap; /* Allow wrapping if controls get too wide */
+    padding: 16px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background-color 0.2s ease;
 }
 
-/* Homepage specific control layout */
-.homepage-control {
-    flex-direction: column; /* Stack select and input */
-    align-items: flex-end; /* Align items to the right */
-    gap: 8px;
+.setting-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
-.custom-homepage-input-container {
-    width: 100%; /* Make container take width */
-    max-width: 250px; /* Limit input width */
+.setting-info {
+    flex: 1;
+    padding-right: 24px;
 }
 
-#custom-homepage-input {
-    width: 100%; /* Make input fill container */
-    box-sizing: border-box; /* Include padding/border in width */
+.setting-info label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--text-color);
 }
 
-/* Specific Controls */
-select, input[type="text"] {
-    padding: 8px 10px;
-    border: 1px solid var(--settings-input-border);
-    background-color: var(--settings-input-bg);
-    color: var(--settings-text-primary);
-    border-radius: 4px;
-    font-size: 13px;
-    min-width: 200px; /* Adjusted min-width */
+.setting-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
 }
 
-select:focus, input[type="text"]:focus {
+/* Form Controls */
+.setting-control {
+    min-width: 200px;
+    padding: 8px 12px;
+    border: 1px solid var(--control-border);
+    border-radius: 8px;
+    background-color: var(--control-bg);
+    color: var(--text-color);
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.setting-control:hover {
+    background-color: var(--control-hover);
+}
+
+.setting-control:focus {
     outline: none;
-    border-color: var(--settings-input-focus-border);
-    box-shadow: 0 0 0 2px rgba(var(--settings-input-focus-border), 0.2); /* Optional focus ring */
-}
-
-/* Button styling */
-.settings-button {
-    padding: 8px 16px;
-    border: 1px solid var(--settings-border-color);
-    background-color: var(--settings-button-bg);
-    color: var(--settings-button-text);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: background-color 0.15s ease;
-}
-
-.settings-button:hover {
-    background-color: var(--settings-button-hover-bg);
-}
-
-.settings-button.primary {
-    background-color: var(--settings-button-primary-bg);
-    color: var(--settings-button-primary-text);
-    border-color: transparent;
-}
-
-.settings-button.primary:hover {
-    background-color: var(--settings-button-primary-hover-bg);
-}
-
-.settings-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background-color: var(--settings-button-bg); /* Ensure disabled style */
-    color: var(--settings-text-secondary);
-}
-.settings-button.primary:disabled {
-    background-color: var(--settings-sidebar-active-border); /* Use a faded primary color */
-     color: var(--settings-button-primary-text);
+    border-color: var(--sidebar-active-text);
+    box-shadow: 0 0 0 2px rgba(136, 192, 247, 0.2);
 }
 
 /* Toggle Switch */
 .toggle-switch {
     position: relative;
     display: inline-block;
-    width: 40px;
-    height: 20px;
+    width: 44px;
+    height: 22px;
 }
 
 .toggle-switch input {
@@ -282,61 +236,39 @@ select:focus, input[type="text"]:focus {
     height: 0;
 }
 
-.slider {
+.toggle-slider {
     position: absolute;
     cursor: pointer;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--settings-toggle-bg-off);
-    transition: .3s;
-    border-radius: 20px;
+    background-color: var(--toggle-bg);
+    transition: .4s;
+    border-radius: 22px;
 }
 
-.slider:before {
+.toggle-slider:before {
     position: absolute;
     content: "";
-    height: 16px;
-    width: 16px;
+    height: 18px;
+    width: 18px;
     left: 2px;
     bottom: 2px;
-    background-color: var(--settings-toggle-knob);
-    transition: .3s;
+    background-color: white;
+    transition: .4s;
     border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-input:checked + .slider {
-    background-color: var(--settings-toggle-bg-on);
+input:checked + .toggle-slider {
+    background-color: var(--toggle-active);
 }
 
-input:focus + .slider {
-    box-shadow: 0 0 1px var(--settings-toggle-bg-on); /* Optional focus indicator */
+input:checked + .toggle-slider:before {
+    transform: translateX(22px);
 }
 
-input:checked + .slider:before {
-    transform: translateX(20px);
-}
-
-/* Display path for download folder */
-.download-path-display {
-    font-size: 12px;
-    color: var(--settings-text-secondary);
-    margin-right: 10px;
-    max-width: 200px; /* Limit width */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    vertical-align: middle;
-}
-
-/* Settings Actions Container */
-.settings-actions-container {
-    margin-top: auto; /* Push to the bottom */
-    padding-top: 20px;
-    border-top: 1px solid var(--settings-border-color);
-    display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
-    gap: 10px; /* Space between buttons */
-    flex-shrink: 0; /* Prevent shrinking */
+.hidden {
+    display: none;
 }
